@@ -2,7 +2,7 @@ version: "3"
 services:
   master:
     container_name: master
-    image: jenkins:latest
+    image: jenkins:2.60.3
     ports: 
       - 8080:8080
     volumes:
