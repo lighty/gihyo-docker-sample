@@ -10,7 +10,7 @@ services:
     deploy:
       mode: global
       placement:
-        constraint:
+        constraints:
           - node.role == manager
     ports:
       - 80:80
