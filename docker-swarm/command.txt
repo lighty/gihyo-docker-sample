@@ -38,3 +38,26 @@ docker container exec -it manager docker service ps echo
 
 # サービスの削除によるコンテナの一括削除
 docker container exec -it manager docker service rm echo
+
+---
+
+# overlayネットワークの作成
+docker container exec -it manager docker network create --driver=overlay --attachable ch03
+
+# Stackをデプロイする
+docker container exec -it manager docker stack deploy -c /stack/ch03-webapi.yml echo
+
+# デプロイされたStackを確認する
+docker container exec -it manager docker stack services echo
+
+# Stackでデプロイされたコンテナを確認する
+docker container exec -it manager docker stack ps echo
+
+# visualizerのデプロイ http://localhost:9000/
+docker container exec -it manager docker stack deploy -c /stack/visualizer.yml visualizer
+
+# Serviceの削除
+docker container exec -it manager docker stack rm echo
+
+# Swarmクラスタ外部からアクセスさせるためのStackのデプロイ
+docker container exec -it manager docker stack deploy -c /stack/ch03-ingress.yml ingress 
