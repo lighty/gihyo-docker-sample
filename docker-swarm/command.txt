@@ -1,0 +1,23 @@
+# Swarmのmanagerに設定する
+docker container exec -it manager docker swarm init 
+
+# workerとして登録(トークンは上記のコマンドで吐き出されたものを使う)
+docker container exec -it worker01 docker swarm join --token SWMTKN-1-2z5g6n0figzoj9o9cx5pkftcvbvz5pl1qfxbgigrjps0yjagte-bkq4srpfjss25tpygejccosof 172.26.0.3:2377
+docker container exec -it worker02 docker swarm join --token SWMTKN-1-2z5g6n0figzoj9o9cx5pkftcvbvz5pl1qfxbgigrjps0yjagte-bkq4srpfjss25tpygejccosof 172.26.0.3:2377
+docker container exec -it worker03 docker swarm join --token SWMTKN-1-2z5g6n0figzoj9o9cx5pkftcvbvz5pl1qfxbgigrjps0yjagte-bkq4srpfjss25tpygejccosof 172.26.0.3:2377
+
+# Swarmクラスタの内容を確認
+docker container exec -it manager docker node ls
+
+# 外側のDockerでビルドしたイメージをレジストリ経由で取得させるため、registryにイメージをpushする
+## タグをつける
+docker image tag example/echo:latest localhost:5000/example/echo:latest
+
+## push
+docker image push localhost:5000/example/echo:latest
+
+## workerコンテナでregistryからイメージをpull
+docker container exec -it worker01 docker pull registry:5000/example/echo:latest
+
+# workerコンテナ内のイメージの確認
+docker container exec -it worker01 docker image ls
