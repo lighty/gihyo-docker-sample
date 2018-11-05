@@ -21,3 +21,20 @@ docker container exec -it worker01 docker pull registry:5000/example/echo:latest
 
 # workerコンテナ内のイメージの確認
 docker container exec -it worker01 docker image ls
+
+---
+
+# Serviceの作成
+docker container exec -it manager docker service create --replicas 1 --publish 8000:8080 --name echo registry:5000/example/echo:latest
+
+# Serviceの一覧を確認
+docker container exec -it manager docker service ls
+
+# コンテナの数を増やす
+docker container exec -it manager docker service scale echo=6
+
+# Serviceで稼働中のコンテナの状況を取得
+docker container exec -it manager docker service ps echo
+
+# サービスの削除によるコンテナの一括削除
+docker container exec -it manager docker service rm echo
