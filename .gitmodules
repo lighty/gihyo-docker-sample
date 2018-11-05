@@ -1,0 +1,3 @@
+[submodule "todo_app/tododb"]
+	path = todo_app/tododb
+	url = https://github.com/gihyodocker/tododb
