@@ -8,3 +8,25 @@ docker image build -t ch04/tododb:latest .
 # タグ付けとregistryへのpush
 docker image tag ch04/tododb:latest localhost:5000/ch04/tododb:latest
 docker image push localhost:5000/ch04/tododb:latest
+
+# todo_mysqlスタックのデプロイ
+docker container exec -it manager docker stack deploy -c /stack/todo-mysql.yml todo_mysql
+
+# 初期データの投入
+## Masterコンテナの特定
+docker container exec -it manager docker service ps todo_mysql_master --no-trunc --filter "desired-state=running"
+
+## ノードのIDとTaskのIDを使って`docker container exec`を多段実行するためのコマンドの出力
+docker container exec -it manager docker service ps todo_mysql_master --no-trunc --filter "desired-state=running" --format "docker container exec -it {{.Node}} docker container exec -it {{.Name}}.{{.ID}} bash"
+
+## 初期データ投入コマンドを実行
+docker container exec -it 1aaf9d9f175b docker container exec -it todo_mysql_master.1.pbxr1ql890cxac7401lcqd3qi init-data.sh
+
+## 初期データ確認
+docker container exec -it 1aaf9d9f175b docker container exec -it todo_mysql_master.1.pbxr1ql890cxac7401lcqd3qi mysql -u gihyo -pgihyo tododb
+
+# Slaveコンテナでも初期データが投入されているか確認
+docker container exec -it manager docker service ps todo_mysql_slave --no-trunc --filter "desired-state=running" --format "docker container exec -it {{.Node}} docker container exec -it {{.Name}}.{{.ID}} bash" | pbcopy
+
+docker container exec -it 1aaf9d9f175b docker container exec -it todo_mysql_slave.1.8yn80r7d9r30xl32jsvoejuyq mysql -u gihyo -pgihyo tododb
+docker container exec -it c731aed8336c docker container exec -it todo_mysql_slave.2.ohr84spyp0xljjnrribknj1qi mysql -u gihyo -pgihyo tododb
