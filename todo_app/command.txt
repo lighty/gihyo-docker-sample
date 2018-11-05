@@ -1,2 +1,10 @@
 # overlayネットワークの構築
 docker container exec -it manager docker network create --driver=overlay --attachable todoapp
+
+# Mysqlイメージのビルド
+cd todo_app/tododb
+docker image build -t ch04/tododb:latest .
+
+# タグ付けとregistryへのpush
+docker image tag ch04/tododb:latest localhost:5000/ch04/tododb:latest
+docker image push localhost:5000/ch04/tododb:latest
