@@ -6,7 +6,7 @@
 	url = https://github.com/gihyodocker/todoapi
 [submodule "todo_app/todonginx"]
 	path = todo_app/todonginx
-	url = https://github.com/gihyodocker/todonginx
+	url = git@github.com:lighty/gihyo-docker-sample-todonginx.git
 [submodule "todo_app/todoweb"]
 	path = todo_app/todoweb
 	url = https://github.com/gihyodocker/todoweb
