@@ -32,9 +32,16 @@ docker container exec -it 1aaf9d9f175b docker container exec -it todo_mysql_slav
 docker container exec -it c731aed8336c docker container exec -it todo_mysql_slave.2.ohr84spyp0xljjnrribknj1qi mysql -u gihyo -pgihyo tododb
 
 ---
+
 # apiイメージのビルド
 docker image build -t ch04/todoapi:latest .
 
 # タグつけとpush
 docker image tag ch04/todoapi:latest localhost:5000/ch04/todoapi:latest
 docker image push localhost:5000/ch04/todoapi:latest
+
+# todo_app Stackとしてデプロイ
+docker container exec -it manager docker stack deploy -c /stack/todo-app.yml todo_app
+
+# todo_app_apiサービスがListenしているかを標準出力から確認
+docker container exec -it manager docker service logs -f todo_app_api
