@@ -45,3 +45,15 @@ docker container exec -it manager docker stack deploy -c /stack/todo-app.yml tod
 
 # todo_app_apiサービスがListenしているかを標準出力から確認
 docker container exec -it manager docker service logs -f todo_app_api
+
+---
+
+# nginxイメージのビルド
+docker image build -t ch04/nginx:latest .
+
+# タグつけとpush
+docker image tag ch04/nginx:latest localhost:5000/ch04/nginx:latest
+docker image push localhost:5000/ch04/nginx:latest
+
+# todo_app Stackの更新
+docker container exec -it manager docker stack deploy -c /stack/todo-app.yml todo_app
