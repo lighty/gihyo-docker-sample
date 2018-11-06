@@ -70,8 +70,11 @@ docker image push localhost:5000/ch04/todoweb:latest
 ---
 
 # nginx設定ファイルのリビルド
-docker image build -f Dockerfile-nuxt -t ch04/nginx-nuxt:latest
+docker image build -f Dockerfile-nuxt -t ch04/nginx-nuxt:latest .
 
 # タグつけとpush
 docker image tag ch04/nginx-nuxt:latest localhost:5000/ch04/nginx-nuxt:latest
 docker image push localhost:5000/ch04/nginx-nuxt:latest
+
+# todo_frontend stackとしてデプロイ
+docker container exec -it manager docker stack deploy -c /stack/todo-frontend.yml todo_frontend
