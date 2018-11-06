@@ -78,3 +78,8 @@ docker image push localhost:5000/ch04/nginx-nuxt:latest
 
 # todo_frontend stackとしてデプロイ
 docker container exec -it manager docker stack deploy -c /stack/todo-frontend.yml todo_frontend
+
+---
+
+# ingressで公開する
+docker container exec -it manager docker stack deploy -c /stack/todo-ingress.yml todo_ingress
